@@ -15,19 +15,23 @@ const DATA_FILE = path.join(__dirname, 'data', 'students.json');
 app.use(express.json());                          // Read JSON from requests
 app.use(express.static(path.join(__dirname, 'public')));  // Serve your frontend files
 
-// ROOT ROUTE — Serve index.html for the root path
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
 // ─── HELPERS ──────────────────────────────────────────────
 function readStudents() {
   if (!fs.existsSync(DATA_FILE)) return [];
-  return JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+  try {
+    return JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+  } catch (err) {
+    console.error('Error reading students data:', err);
+    return [];
+  }
 }
 
 function writeStudents(data) {
-  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+  try {
+    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+  } catch (err) {
+    console.error('Error writing students data:', err);
+  }
 }
 
 function generateId() {
@@ -118,7 +122,24 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// ERROR HANDLER
+app.use((err, req, res, next) => {
+  console.error('Error:', err.message);
+  res.status(500).json({ error: 'Internal server error' });
+});
+
 // ─── START SERVER ──────────────────────────────────────────
-app.listen(PORT, '0.0.0.0', () => {
+const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
+});
+
+// Handle unhandled rejections
+process.on('unhandledRejection', (err) => {
+  console.error('Unhandled Rejection:', err);
+  process.exit(1);
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+  process.exit(1);
 });
