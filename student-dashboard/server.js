@@ -109,7 +109,9 @@ app.get('/api/stats', (req, res) => {
 });
 
 // ─── START SERVER ──────────────────────────────────────────
-app.listen(PORT, () => {
-  console.log(`\n✅ Server running at http://localhost:${PORT}`);
-  console.log('   Press Ctrl+C to stop.\n');
+const PORT = process.env.PORT ||8080;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
 });
+
+}
