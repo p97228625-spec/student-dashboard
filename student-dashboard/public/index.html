@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════
+       SIDEBAR NAVIGATION
+  ═══════════════════════════════════ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <span class="logo-mark">S</span>
+      <span class="logo-text">Scholar</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active" data-page="dashboard">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </a>
+      <a href="#" class="nav-item" data-page="students">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        Students
+      </a>
+      <a href="#" class="nav-item" data-page="add">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        Add Student
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="admin-chip">
+        <div class="admin-avatar">A</div>
+        <div>
+          <div class="admin-name">Admin</div>
+          <div class="admin-role">Administrator</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ═══════════════════════════════════
+       MAIN CONTENT AREA
+  ═══════════════════════════════════ -->
+  <main class="main">
+
+    <!-- TOAST NOTIFICATION -->
+    <div class="toast" id="toast"></div>
+
+    <!-- ─── PAGE: DASHBOARD ─── -->
+    <section class="page active" id="page-dashboard">
+      <header class="page-header">
+        <div>
+          <h1>Dashboard</h1>
+          <p class="subtitle">Overview of all students</p>
+        </div>
+      </header>
+
+      <!-- Stats Cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total Students</div>
+          <div class="stat-value" id="stat-total">—</div>
+        </div>
+        <div class="stat-card accent">
+          <div class="stat-label">Active</div>
+          <div class="stat-value" id="stat-active">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Inactive</div>
+          <div class="stat-value" id="stat-inactive">—</div>
+        </div>
+      </div>
+
+      <!-- Grade Breakdown -->
+      <div class="section-block">
+        <h2 class="section-title">Grade Breakdown</h2>
+        <div class="grade-bars" id="grade-bars"></div>
+      </div>
+
+      <!-- Recent Students -->
+      <div class="section-block">
+        <h2 class="section-title">Recent Enrollments</h2>
+        <table class="data-table" id="recent-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Subject</th>
+              <th>Grade</th>
+              <th>Status</th>
+              <th>Enrolled</th>
+            </tr>
+          </thead>
+          <tbody id="recent-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ─── PAGE: ALL STUDENTS ─── -->
+    <section class="page" id="page-students">
+      <header class="page-header">
+        <div>
+          <h1>Students</h1>
+          <p class="subtitle">Manage your student records</p>
+        </div>
+        <div class="header-actions">
+          <input type="text" class="search-input" id="search-input" placeholder="Search by name…" oninput="filterStudents()" />
+        </div>
+      </header>
+
+      <table class="data-table" id="students-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Subject</th>
+            <th>Grade</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="students-body"></tbody>
+      </table>
+    </section>
+
+    <!-- ─── PAGE: ADD / EDIT STUDENT ─── -->
+    <section class="page" id="page-add">
+      <header class="page-header">
+        <div>
+          <h1 id="form-title">Add Student</h1>
+          <p class="subtitle">Fill in the student's details below</p>
+        </div>
+      </header>
+
+      <div class="form-card">
+        <input type="hidden" id="edit-id" />
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-name">Full Name *</label>
+            <input type="text" id="f-name" placeholder="e.g. Aanya Sharma" />
+          </div>
+          <div class="form-group">
+            <label for="f-email">Email Address *</label>
+            <input type="email" id="f-email" placeholder="e.g. aanya@school.edu" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-grade">Grade *</label>
+            <select id="f-grade">
+              <option value="">— Select grade —</option>
+              <option value="A">A — Excellent</option>
+              <option value="B">B — Good</option>
+              <option value="C">C — Average</option>
+              <option value="D">D — Below Average</option>
+              <option value="F">F — Failing</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="f-subject">Subject</label>
+            <input type="text" id="f-subject" placeholder="e.g. Mathematics" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-status">Status</label>
+            <select id="f-status">
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn-secondary" onclick="cancelForm()">Cancel</button>
+          <button class="btn-primary" onclick="submitForm()">Save Student</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ─── CONFIRM MODAL ─── -->
+  <div class="modal-overlay" id="modal" onclick="closeModal()">
+    <div class="modal" onclick="event.stopPropagation()">
+      <h3>Delete Student?</h3>
+      <p>This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+        <button class="btn-danger" onclick="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
