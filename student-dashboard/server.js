@@ -13,7 +13,12 @@ const DATA_FILE = path.join(__dirname, 'data', 'students.json');
 
 // MIDDLEWARE — Tells Express how to read incoming data
 app.use(express.json());                          // Read JSON from requests
-app.use(express.static('public'));                // Serve your frontend files
+app.use(express.static(path.join(__dirname, 'public')));  // Serve your frontend files
+
+// ROOT ROUTE — Serve index.html for the root path
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 // ─── HELPERS ──────────────────────────────────────────────
 function readStudents() {
