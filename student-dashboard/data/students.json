@@ -52,5 +52,14 @@
     "subject": "Physics",
     "status": "Active",
     "enrolledDate": "2026-05-07"
+  },
+  {
+    "id": "1778138398982",
+    "name": "Jane Smith",
+    "email": "jane.smith@school.edu",
+    "grade": "A",
+    "subject": "Chemistry",
+    "status": "Active",
+    "enrolledDate": "2026-05-07"
   }
 ]
