@@ -113,6 +113,11 @@ app.get('/api/stats', (req, res) => {
   res.json({ total, active, inactive, gradeCounts });
 });
 
+// FALLBACK ROUTE — Serve index.html for all non-API routes (SPA support)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 // ─── START SERVER ──────────────────────────────────────────
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
